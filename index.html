@@ -201,22 +201,14 @@ body {
 
 .pl-layout { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
-.song.pl { grid-template-columns: 1.67rem 2.67rem 1fr auto; gap: .56rem; padding-left: .33rem; }
-.row-move { display: flex; flex-direction: column; gap: 3px; }
-.row-move button {
-  width: 1.67rem; height: 1.22rem; padding: 0;
-  display: grid; place-items: center;
-  color: var(--dim); background: #2a2b2f;
-  border: 2px solid; border-color: #55565c #18181a #18181a #55565c;
-  border-radius: 4px; cursor: pointer;
-}
-.row-move button:hover:not([disabled]) { color: #fff; background: #55565c; }
-.row-move button:active:not([disabled]) { border-color: #18181a #55565c #55565c #18181a; }
-.row-move button[disabled] { opacity: .3; cursor: default; }
-.song.selected .row-move button { background: rgba(0,0,0,.4); color: #fff; }
+.song.pl { grid-template-columns: .9rem 2.67rem 1fr auto; gap: .56rem; padding-left: .45rem; }
+.grip { display: grid; place-items: center; color: #6c6d73; }
+.song.pl:hover .grip { color: var(--dim); }
+.song.selected .grip, .song.ghost .grip { color: rgba(255,255,255,.6); }
 
 .song.pl { cursor: grab; }
-.song.pl .tile { touch-action: none; }
+.song.pl { -webkit-touch-callout: none; touch-action: pan-y; }
+.song.pl.holding { transform: scale(.98); transition: transform .15s; }
 .song.placeholder, .song.placeholder:hover {
   background: transparent; border: 2px dashed var(--hi); box-shadow: none;
 }
@@ -227,7 +219,7 @@ body {
   box-shadow: 0 14px 28px rgba(0,0,0,.6);
   transform: scale(1.02);
 }
-.song.ghost .tile, .song.ghost .row-move button, .song.ghost .row-remove { background: rgba(0,0,0,.4); color: #fff; }
+.song.ghost .tile, .song.ghost .row-remove { background: rgba(0,0,0,.4); color: #fff; }
 body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select: none; }
 
 .row-remove {
@@ -287,7 +279,7 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
 .song .tile svg { width: 1.45rem; height: 1.45rem; }
 .song.added .meta svg { width: 1.45rem; height: 1.45rem; }
 .row-remove svg { width: 1rem; height: 1rem; }
-.row-move svg { width: .8rem; height: .8rem; }
+.grip svg { width: .9rem; height: .9rem; }
 .btn.square svg { width: 1.3rem; height: 1.3rem; }
 .dropzone svg { width: 1.22rem; height: 1.22rem; }
 </style>
@@ -301,8 +293,7 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
   </symbol>
   <symbol id="i-file" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1h7v1h1v1h1v1h1v11H3zm2 2v10h6V6H8V3zm4 0v2h1V4h-1z"/></symbol>
   <symbol id="i-note" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2h9v9h-1v1h-1v1H9v-1H8v-3h1V8h3v1h0V5H7v7H6v1H5v1H2v-1H1v-3h1V9h3z"/></symbol>
-  <symbol id="i-up" viewBox="0 0 16 16"><path fill="currentColor" d="M7 3h2v1h1v1h1v1h1v1h1v2h-2V8h-1V7H9v6H7V7H6v1H5v1H3V7h1V6h1V5h1V4h1z"/></symbol>
-  <symbol id="i-down" viewBox="0 0 16 16"><path fill="currentColor" d="M7 3h2v6h1V8h1V7h2v2h-1v1h-1v1h-1v1H9v1H7v-1H6v-1H5v-1H4V9H3V7h2v1h1v1h1z"/></symbol>
+  <symbol id="i-grip" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2h2v2H5zm4 0h2v2H9zM5 6h2v2H5zm4 0h2v2H9zm-4 4h2v2H5zm4 0h2v2H9zm-4 4h2v2H5zm4 0h2v2H9z"/></symbol>
   <symbol id="i-trash" viewBox="0 0 16 16"><path fill="currentColor" d="M6 1h4v1h4v2H2V2h4zM3 5h10v9h-1v1H4v-1H3zm2 2v6h1V7zm2.5 0v6h1V7zM10 7v6h1V7z"/></symbol>
   <symbol id="i-repeat" viewBox="0 0 16 16"><path fill="currentColor" d="M11 1h1v1h1v1h1v1h-1v1h-1v1h-1V5H4v3H2V4h1V3h8zM13 8h1v4h-1v1H5v2H4v-1H3v-1H2v-1h1v-1h1V9h1v2h7V8z"/></symbol>
   <symbol id="i-shuffle" viewBox="0 0 16 16"><path fill="currentColor" d="M12 1h1v1h1v1h1v1h-1v1h-1v1h-1V5h-2v1H9v1H8v2h1v1h1v1h2v-1h1v1h1v1h1v1h-1v1h-1v1h-1v-2h-2v-1H9v-1H8V9H7V7H6V6H5V5H1V3h5v1h1v1h1v1h1V5h1V4h2zM1 11h4v-1h1V9h1v2H6v1H5v1H1z"/></symbol>
@@ -527,7 +518,12 @@ function moveAt(index, direction) {
   selected = target;
   render();
   scrollToSelected();
-  els.playlist.querySelector(`.selected .row-move button:${direction < 0 ? "first" : "last"}-child`)?.focus();
+  els.playlist.querySelector(".selected")?.focus();
+}
+function selectAt(index) {
+  selected = index;
+  render();
+  els.playlist.querySelector(".selected")?.focus({ preventScroll: true });
 }
 function setPlaylist(codes) {
   playlist = codes;
@@ -614,31 +610,23 @@ function renderPlaylist() {
     li.querySelector(".slot").replaceWith(bin);
 
     li.classList.add("pl");
-    const move = document.createElement("span");
-    move.className = "row-move";
-    const arrow = (iconId, dir, label) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.title = label;
-      b.setAttribute("aria-label", `${label}: ${song.name}`);
-      b.innerHTML = icon(iconId, 14);
-      b.disabled = (dir < 0 && i === 0) || (dir > 0 && i === playlist.length - 1);
-      b.addEventListener("click", e => { e.stopPropagation(); moveAt(i, dir); });
-      b.addEventListener("keydown", e => e.stopPropagation());
-      return b;
-    };
-    move.append(arrow("i-up", -1, "Move up"), arrow("i-down", 1, "Move down"));
-    li.prepend(move);
+    const grip = document.createElement("span");
+    grip.className = "grip";
+    grip.innerHTML = icon("i-grip", 16);
+    li.prepend(grip);
+    li.title = "Drag to reorder";
 
     if (i === selected) li.classList.add("selected");
     li.dataset.index = i;
     li.tabIndex = 0;
     li.setAttribute("aria-selected", i === selected);
-    li.setAttribute("aria-label", `${i + 1}. ${song.name}${i === selected ? ", selected" : ""}`);
-    li.addEventListener("click", () => { if (justDragged) return; selected = i; render(); });
+    li.setAttribute("aria-label", `${i + 1}. ${song.name}${i === selected ? ", selected" : ""}. Alt plus arrow keys to move.`);
+    li.addEventListener("click", () => { if (justDragged) return; selectAt(i); });
     li.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selected = i; render(); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectAt(i); }
       if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); removeAt(i); }
+      if (e.altKey && e.key === "ArrowUp") { e.preventDefault(); moveAt(i, -1); }
+      if (e.altKey && e.key === "ArrowDown") { e.preventDefault(); moveAt(i, 1); }
     });
     els.playlist.append(li);
   });
@@ -796,9 +784,27 @@ const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 els.playlist.addEventListener("pointerdown", e => {
   const li = e.target.closest(".song.pl");
   if (!li || e.target.closest("button") || e.button !== 0) return;
-  if (e.pointerType !== "mouse" && !e.target.closest(".tile")) return;
-  drag = { li, from: +li.dataset.index, startY: e.clientY, active: false, ghost: null, offsetY: 0, lastY: e.clientY };
+  drag = { li, from: +li.dataset.index, startY: e.clientY, active: false, ghost: null, offsetY: 0, lastY: e.clientY,
+           touch: e.pointerType !== "mouse", timer: null };
+  if (drag.touch) {
+    li.classList.add("holding");
+    drag.timer = setTimeout(() => {
+      if (!drag || drag.active) return;
+      li.classList.remove("holding");
+      navigator.vibrate?.(15);
+      startDrag();
+    }, 300);
+  }
 });
+
+function cancelHold() {
+  if (!drag) return;
+  clearTimeout(drag.timer);
+  drag.li.classList.remove("holding");
+}
+
+els.playlist.addEventListener("touchmove", e => { if (drag?.active) e.preventDefault(); }, { passive: false });
+els.playlist.addEventListener("contextmenu", e => { if (e.target.closest(".song.pl")) e.preventDefault(); });
 
 function slideRows(before) {
   if (reduceMotion) return;
@@ -844,7 +850,12 @@ function updateDrag(clientY) {
 window.addEventListener("pointermove", e => {
   if (!drag) return;
   if (!drag.active) {
-    if (Math.abs(e.clientY - drag.startY) < 6) return;
+    const moved = Math.abs(e.clientY - drag.startY);
+    if (drag.touch) {
+      if (moved > 8) { cancelHold(); drag = null; }
+      return;
+    }
+    if (moved < 6) return;
     startDrag();
   }
   e.preventDefault();
@@ -864,6 +875,7 @@ window.addEventListener("pointermove", e => {
 
 function endDrag() {
   if (!drag) return;
+  cancelHold();
   const d = drag;
   drag = null;
   if (!d.active) return;
