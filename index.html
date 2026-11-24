@@ -50,12 +50,65 @@ body { margin: 0; }
   color-scheme: dark;
 }
 [hidden] { display: none !important; }
+.toast { display: flex; align-items: center; gap: .8rem; }
+.toast-btn {
+  font: 400 1.05rem var(--font-ui); color: #fff; background: var(--red-dark);
+  border: 2px solid; border-color: rgba(255,255,255,.25) rgba(0,0,0,.55) rgba(0,0,0,.55) rgba(255,255,255,.25);
+  border-radius: 5px; padding: .2rem .7rem; cursor: pointer; flex: none;
+}
+.toast-btn:hover { filter: brightness(1.2); }
+.app-foot {
+  display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: flex-end; align-items: center;
+  margin: 0; color: var(--dim); font-size: .95rem; flex: none;
+}
+.app-foot nav { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; }
+.app-foot a, .help a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.app-foot a:hover, .help a:hover { color: #fff; }
+.help-wrap {
+  max-width: 89rem; margin: 0 auto;
+  padding-block: 0 3rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.help-body { padding: 1.1rem 1.3rem 1.3rem; display: grid; gap: 1.4rem; }
+.help-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 2rem; align-items: start; }
+@media (max-width: 860px) { .help-cols { grid-template-columns: 1fr; } }
+.help h3 { font-family: var(--font-title); font-weight: 400; font-size: 1.5rem; letter-spacing: .03em; margin: 0 0 .5rem; color: #fff; }
+.help ol { margin: 0; padding-left: 1.4rem; display: grid; gap: .45rem; }
+.help p { margin: 0; }
+.help code { font-family: var(--font-num); font-size: 1.15rem; color: #fff; }
+.help-cols > div { min-width: 0; }
+.path-copy {
+  font: 400 .9rem var(--font-ui); color: var(--text); background: #3f4045;
+  border: 2px solid; border-color: var(--hi) var(--lo) var(--lo) var(--hi);
+  border-radius: 5px; padding: .05rem .5rem; cursor: pointer; vertical-align: middle;
+}
+.path-copy:hover { background: #4a4b51; }
+.path-box {
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  margin-top: .4rem; padding: .45rem .6rem;
+  background: var(--well); border-radius: 6px;
+  border: 2px solid; border-color: var(--lo) var(--hi) var(--hi) var(--lo);
+}
+.path-box code { flex: 1 1 14rem; min-width: 0; }
+.path-tip { display: block; margin-top: .35rem; color: var(--dim); font-size: .95rem; }
+.help code, .help li { overflow-wrap: anywhere; }
+.faq { display: grid; gap: .45rem; }
+.faq details {
+  background: var(--row); border-radius: 6px;
+  border: 2px solid; border-color: #55565c #202023 #202023 #55565c;
+}
+.faq summary { cursor: pointer; padding: .55rem .8rem; color: var(--text); }
+.faq summary:hover { background: #45464b; }
+.faq details[open] summary { border-bottom: 2px solid #202023; }
+.faq details p { padding: .6rem .8rem .7rem; color: var(--dim); }
+.help-foot { color: var(--dim); font-size: .95rem; border-top: 2px solid #202023; padding-top: 1rem; }
 * { box-sizing: border-box; }
 html { font-size: 18px; }
 @media (min-width: 2000px) { html { font-size: 21px; } }
 @media (min-width: 2400px) { html { font-size: 24px; } }
 @media (min-width: 3200px) { html { font-size: 32px; } }
-html, body { height: 100%; }
+html, body { height: auto; }
 body {
   background: var(--world);
   background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 2px, transparent 2px 4px);
@@ -66,7 +119,7 @@ body {
   letter-spacing: .02em;
 }
 .stage {
-  height: 100%;
+  height: 100vh; height: 100dvh;
   margin: 0 auto;
   padding-block: 18px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -83,6 +136,9 @@ body {
   display: flex; flex-direction: column;
 }
 .main-window { flex: 1; }
+body { -webkit-user-select: none; user-select: none; }
+#output, .intro, #mode-note, .help-body { -webkit-user-select: text; user-select: text; }
+.help-body button { -webkit-user-select: none; user-select: none; }
 .titlebar {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   background: var(--red);
@@ -122,6 +178,10 @@ body {
 .dropzone:hover { color: var(--text); border-color: var(--text); }
 .dropzone svg { flex: none; }
 .intro b { color: var(--text); font-weight: 400; }
+.intro a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.intro a:hover { color: #fff; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 .btn {
   font: 400 1.1rem var(--font-ui);
@@ -140,7 +200,6 @@ body {
 
 .btn.on-red { background: var(--red-dark); color: #fff; border-color: rgba(255,255,255,.25) rgba(0,0,0,.55) rgba(0,0,0,.55) rgba(255,255,255,.25); }
 .btn.on-red:hover { background: var(--red-dark); filter: brightness(1.2); }
-.bar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .download {
   width: 100%; min-height: 3.56rem;
@@ -207,8 +266,14 @@ body {
 .song.selected .grip, .song.ghost .grip { color: rgba(255,255,255,.6); }
 
 .song.pl { cursor: grab; }
-.song.pl { -webkit-touch-callout: none; touch-action: pan-y; }
-.song.pl.holding { transform: scale(.98); transition: transform .15s; }
+.song.pl, #library .song { -webkit-touch-callout: none; touch-action: pan-y; }
+#library .song:not(.added) { cursor: grab; }
+#library .song.added { cursor: default; }
+#library .song.lifting { opacity: .35; }
+.well.drop-target { box-shadow: inset 0 0 0 2px var(--red); }
+.well.drop-hover { background: #231a1c; }
+.song.placeholder.incoming { border-color: var(--red); }
+.song.holding { transform: scale(.98); transition: transform .15s; }
 .song.placeholder, .song.placeholder:hover {
   background: transparent; border: 2px dashed var(--hi); box-shadow: none;
 }
@@ -234,6 +299,17 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select:
 .song.selected .row-remove { background: rgba(0,0,0,.4); color: #fff; }
 .pl-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; flex: none; }
 .group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.pl-foot .group:first-child { flex: 1 1 14rem; min-width: 0; flex-wrap: nowrap; }
+.code-btn { flex: 1 1 auto; min-width: 0; justify-content: flex-start; gap: .6rem; }
+.code-label { flex: none; }
+.code-peek {
+  flex: 1 1 auto; min-width: 0; max-width: 16rem;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-family: var(--font-num); font-size: 1.05rem; color: var(--dim);
+  background: var(--well); border-radius: 4px; padding: .05rem .45rem;
+  border: 2px solid; border-color: var(--lo) var(--hi) var(--hi) var(--lo);
+}
+.code-btn[aria-expanded="true"] .code-peek { display: none; }
 .note { font-size: .95rem; color: var(--dim); margin: 0; flex: none; }
 
 .code-box { flex: none; }
@@ -304,15 +380,11 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
   <div class="window main-window">
     <header class="titlebar">
       <h1><svg width="44" height="44" aria-hidden="true"><use href="#i-wink"/></svg>CyberGrindPlaylistBuilderOS 2.0</h1>
-      <div class="bar-actions">
-        <button class="btn on-red" id="import-btn" type="button">Import</button>
-        <button class="btn on-red" id="copy-btn" type="button">Copy</button>
-        <input type="file" id="import-file" accept=".json,application/json" aria-label="Choose a slot1.json file">
-      </div>
     </header>
 
     <div class="window-body">
-      <p class="intro">Click songs in the library to add them, then <b>download slot1.json</b> and put it in <b>ULTRAKILL\Preferences\Playlists</b> with the game closed. To edit a playlist you already have, drag your slot1.json onto this page.</p>
+      <p class="intro">Pick songs, drag them into order, then download your slot1.json. First time here? <a href="#help">See how to use it</a>.</p>
+      <input type="file" id="import-file" accept=".json,application/json" aria-label="Choose a slot1.json file">
       <button class="dropzone" id="dropzone" type="button"><svg width="22" height="22" aria-hidden="true"><use href="#i-file"/></svg>Drop your slot1.json here, or click to pick it</button>
 
       <div class="panes">
@@ -344,12 +416,11 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
 
             <div class="pl-foot">
               <div class="group">
-                <button class="btn" id="code-toggle" type="button" aria-expanded="false" aria-controls="code-box">Show code</button>
+                <button class="btn code-btn" id="code-toggle" type="button" aria-expanded="false" aria-controls="code-box"><span class="code-label">Show code</span><code class="code-peek" id="code-peek" aria-hidden="true"></code></button>
                 <button class="btn" id="clear" type="button">Clear</button>
-                <button class="btn" id="defaults" type="button">Load game default</button>
               </div>
               <div class="group">
-                <button class="btn square" id="loop" type="button" aria-pressed="false" aria-label="Repeat one song" title="Repeat one song (not confirmed yet)"><svg width="24" height="24" aria-hidden="true"><use href="#i-repeat"/></svg></button>
+                <button class="btn square" id="loop" type="button" aria-pressed="false" aria-label="Repeat one song" title="Repeat one song"><svg width="24" height="24" aria-hidden="true"><use href="#i-repeat"/></svg></button>
                 <button class="btn square" id="shuffle" type="button" aria-pressed="true" aria-label="Shuffle" title="Shuffle"><svg width="24" height="24" aria-hidden="true"><use href="#i-shuffle"/></svg></button>
               </div>
             </div>
@@ -365,9 +436,66 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
           </div>
         </section>
       </div>
+      <div class="app-foot">
+        <nav aria-label="More">
+          <a href="#help">How to use &amp; FAQ</a>
+          <a href="https://github.com/adr1an-dev/cg-playlist-builder/issues" target="_blank" rel="noopener">Report a bug</a>
+          <a href="https://github.com/adr1an-dev/cg-playlist-builder" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+      </div>
     </div>
   </div>
 </div>
+
+<section class="help-wrap" id="help" aria-labelledby="help-title">
+  <div class="window help">
+    <div class="titlebar"><h2 id="help-title"><svg width="32" height="32" aria-hidden="true"><use href="#i-wink"/></svg>Help</h2></div>
+    <div class="help-body">
+      <div class="help-cols">
+        <div>
+          <h3>How to use it</h3>
+          <ol>
+            <li>Click songs in the library to add them. Drag them in the playlist to change the order.</li>
+            <li>Click <b>Download slot1.json</b>.</li>
+            <li>Keep a copy of your old <code>slot1.json</code>, just in case.</li>
+            <li>Put the new file in the Playlists folder, replacing the old one. On a standard Steam install it's here:<span class="path-box"><code>C:\<wbr>Program Files (x86)\<wbr>Steam\<wbr>steamapps\<wbr>common\<wbr>ULTRAKILL\<wbr>Preferences\<wbr>Playlists</code><button class="path-copy" type="button" data-copy-path>Copy path</button></span><span class="path-tip">Paste it into File Explorer's address bar to jump straight there. Installed somewhere else? In Steam, right-click ULTRAKILL, choose Manage, then Browse local files, and open Preferences, then Playlists.</span></li>
+            <li>Open the Cyber Grind and your playlist is ready.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>FAQ</h3>
+          <div class="faq">
+            <details>
+              <summary>Where is the ULTRAKILL folder?</summary>
+              <p>In Steam, right-click ULTRAKILL, choose Manage, then Browse local files. The Preferences folder is in there.</p>
+            </details>
+            <details>
+              <summary>Do I need to close the game first?</summary>
+              <p>No. You can swap the file while ULTRAKILL is running, even while you're in the Cyber Grind lobby.</p>
+            </details>
+            <details>
+              <summary>Do I need the songs unlocked?</summary>
+              <p>No. Songs work in your playlist even if you haven't unlocked them in the Cyber Grind yet. Heads up: the library includes music from later levels, so the song names can spoil a little.</p>
+            </details>
+            <details>
+              <summary>What about my own custom music?</summary>
+              <p>Drag your current slot1.json onto this page and your custom songs stay in, shown as "Custom" with their file name. To add new files of your own, use the in-game playlist menu.</p>
+            </details>
+            <details>
+              <summary>Will it remember my playlist?</summary>
+              <p>Yes. Your playlist is saved in this browser, so it's still there if you refresh or come back later. Clearing your browser data removes it.</p>
+            </details>
+            <details>
+              <summary>Found a bug or have an idea?</summary>
+              <p><a href="https://github.com/adr1an-dev/cg-playlist-builder/issues" target="_blank" rel="noopener">Open an issue on GitHub</a> and describe what happened or what you'd like added.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+      <p class="help-foot">Made by <a href="https://github.com/adr1an-dev" target="_blank" rel="noopener">Adrian</a> for the ULTRAKILL community. Fan-made, not affiliated with New Blood Interactive.</p>
+    </div>
+  </div>
+</section>
 
 <div class="drop" id="drop" hidden>
   <div class="window">
@@ -464,7 +592,6 @@ const SONGS = [
 ].map(([name, code], i) => ({ name, code, num: i + 1 }));
 
 const BY_CODE = new Map(SONGS.map(s => [s.code, s]));
-const DEFAULT_CODES = SONGS.slice(0, 8).map(s => s.code);
 
 let playlist = [];
 let selected = -1;
@@ -479,12 +606,54 @@ const els = {
 };
 
 let toastTimer;
-function toast(msg, isError = false) {
-  els.toast.textContent = msg;
+function toast(msg, isError = false, action = null) {
+  const text = document.createElement("span");
+  text.textContent = msg;
+  els.toast.replaceChildren(text);
+  if (action) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "toast-btn";
+    btn.textContent = action.label;
+    btn.addEventListener("click", () => { els.toast.hidden = true; action.fn(); });
+    els.toast.append(btn);
+  }
   els.toast.classList.toggle("err", isError);
   els.toast.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { els.toast.hidden = true; }, 3500);
+  toastTimer = setTimeout(() => { els.toast.hidden = true; }, action ? 7000 : 3500);
+}
+
+function snapshot() {
+  return { items: [...playlist], shuffle, loopOne };
+}
+function restore(snap) {
+  playlist = [...snap.items];
+  shuffle = snap.shuffle;
+  loopOne = snap.loopOne;
+  selected = playlist.length ? 0 : -1;
+  render();
+  toast("Restored your playlist.");
+}
+function undoable(prev) {
+  return prev.items.length ? { label: "Undo", fn: () => restore(prev) } : null;
+}
+
+function keyFor(entry) {
+  return entry.type === 0 && BY_CODE.has(entry.path) ? entry.path : `${entry.type}::${entry.path}`;
+}
+function entryFor(key) {
+  if (BY_CODE.has(key)) return { path: key, type: 0 };
+  const cut = key.indexOf("::");
+  return { path: key.slice(cut + 2), type: Number(key.slice(0, cut)) };
+}
+function itemInfo(key) {
+  const song = BY_CODE.get(key);
+  if (song) return { name: song.name, iconId: "i-note" };
+  const entry = entryFor(key);
+  if (entry.type === 0) return { name: "Unknown game song", iconId: "i-note" };
+  const file = entry.path.split(/[\\/]/).pop() || entry.path;
+  return { name: `Custom: ${file}`, iconId: "i-file" };
 }
 
 const icon = (id, size = 26) =>
@@ -507,9 +676,12 @@ function removeAt(index) {
   if (selected >= playlist.length) selected = playlist.length - 1;
   render();
 }
-function toggleSong(code) {
+function pickSong(code) {
   const i = playlist.indexOf(code);
-  i === -1 ? addSong(code) : removeAt(i);
+  if (i === -1) { addSong(code); return; }
+  selected = i;
+  render();
+  scrollToSelected();
 }
 function moveAt(index, direction) {
   const target = index + direction;
@@ -534,7 +706,7 @@ function setPlaylist(codes) {
 
 function buildJson() {
   return JSON.stringify({
-    _ids: playlist.map(code => ({ path: code, type: 0 })),
+    _ids: playlist.map(entryFor),
     _loopMode: loopOne ? 1 : 0,
     _selected: Math.max(0, selected),
     _shuffled: shuffle,
@@ -565,23 +737,22 @@ function renderLibrary() {
 
   for (const song of matches) {
     const added = playlist.includes(song.code);
-    const li = songRow({ name: song.name, iconId: "i-note", meta: added ? "" : "Add" });
-    if (added) {
-      li.classList.add("added");
-      li.querySelector(".meta").innerHTML = icon("i-check", 26);
-    }
+    const li = songRow({ name: song.name, iconId: "i-note", meta: "" });
+    li.querySelector(".meta").remove();
+    if (added) li.classList.add("added");
     li.tabIndex = 0;
     li.setAttribute("role", "button");
-    li.setAttribute("aria-pressed", added);
-    li.setAttribute("aria-label", `${song.name}, ${added ? "in playlist, press to remove" : "press to add"}`);
-    li.addEventListener("click", () => toggleSong(song.code));
+    li.setAttribute("aria-label", `${song.name}, ${added ? "already in playlist, press to find it" : "press to add"}`);
+    li.dataset.code = song.code;
+    if (!added) li.title = "Click or drag to add";
+    li.addEventListener("click", () => { if (!justDragged) pickSong(song.code); });
     li.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSong(song.code); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pickSong(song.code); }
     });
     els.library.append(li);
   }
   els.library.scrollTop = scroll;
-  els.libCount.textContent = `${playlist.length} / ${SONGS.length} added`;
+  els.libCount.textContent = `${playlist.filter(k => BY_CODE.has(k)).length} / ${SONGS.length} added`;
 }
 
 function renderPlaylist() {
@@ -596,8 +767,8 @@ function renderPlaylist() {
   }
 
   playlist.forEach((code, i) => {
-    const song = BY_CODE.get(code);
-    const li = songRow({ name: song.name, iconId: "i-note", meta: "", metaClass: "slot" });
+    const song = itemInfo(code);
+    const li = songRow({ name: song.name, iconId: song.iconId, meta: "", metaClass: "slot" });
 
     const bin = document.createElement("button");
     bin.type = "button";
@@ -636,13 +807,31 @@ function renderPlaylist() {
   $("shuffle").setAttribute("aria-pressed", shuffle);
   $("loop").setAttribute("aria-pressed", loopOne);
   $("mode-note").textContent =
-    `${shuffle ? "Shuffle on" : "Shuffle off"}, ${loopOne ? "repeat one song (not confirmed yet)" : "loops the whole playlist"}.`;
+    loopOne
+      ? (shuffle ? "Repeats one random song." : "Repeats the highlighted song. Click a song to pick it.")
+      : `${shuffle ? "Shuffle on" : "Shuffle off"}, loops the whole playlist.`;
+}
+
+const STORE_KEY = "cgpb-playlist-v1";
+function savePlaylist() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify({ items: playlist, shuffle, loopOne })); } catch {}
+}
+function loadSaved() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (!d || !Array.isArray(d.items)) return;
+    playlist = [...new Set(d.items.filter(k => typeof k === "string" && (BY_CODE.has(k) || k.includes("::"))))];
+    if (typeof d.shuffle === "boolean") shuffle = d.shuffle;
+    loopOne = d.loopOne === true;
+  } catch {}
 }
 
 function render() {
   renderLibrary();
   renderPlaylist();
   els.output.value = buildJson();
+  $("code-peek").textContent = els.output.value;
+  savePlaylist();
 }
 
 function importJson(text) {
@@ -652,12 +841,14 @@ function importJson(text) {
     toast("That isn't a slot1.json file. Check you picked the right one.", true);
     return;
   }
-  const codes = [...new Set(data._ids.filter(x => x.type === 0).map(x => x.path))].filter(c => BY_CODE.has(c));
-  const skipped = data._ids.length - codes.length;
+  const entries = data._ids.filter(x => x && typeof x.path === "string" && typeof x.type === "number");
+  const keys = [...new Set(entries.map(keyFor))];
+  const custom = keys.filter(k => !BY_CODE.has(k)).length;
+  const prev = snapshot();
   if (typeof data._shuffled === "boolean") shuffle = data._shuffled;
   loopOne = data._loopMode === 1;
-  setPlaylist(codes);
-  toast(`Loaded ${codes.length} songs` + (skipped ? `, skipped ${skipped} (custom files or duplicates).` : "."));
+  setPlaylist(keys);
+  toast(`Loaded ${keys.length} songs` + (custom ? `, including ${custom} custom or unknown, kept as they are.` : "."), false, undoable(prev));
 }
 
 function readFile(file) {
@@ -668,7 +859,6 @@ function readFile(file) {
   reader.readAsText(file);
 }
 
-$("import-btn").addEventListener("click", () => $("import-file").click());
 $("dropzone").addEventListener("click", () => $("import-file").click());
 $("import-file").addEventListener("change", e => { readFile(e.target.files[0]); e.target.value = ""; });
 
@@ -743,7 +933,7 @@ async function downloadJson() {
       toast("Downloaded slot1.json.");
       countCreated();
     } catch (err) {
-      if (err?.code !== "declined") toast("Download didn't work here. Use Copy instead.", true);
+      if (err?.code !== "declined") toast("Download didn't work here. Use Show code and copy it instead.", true);
     }
     return;
   }
@@ -757,6 +947,25 @@ async function downloadJson() {
   toast("Downloaded slot1.json.");
   countCreated();
 }
+
+const DEFAULT_PATH = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\ULTRAKILL\\Preferences\\Playlists";
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch {}
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.setAttribute("readonly", "");
+  ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
+  document.body.append(ta); ta.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch {}
+  ta.remove();
+  return ok;
+}
+
+document.querySelectorAll("[data-copy-path]").forEach(btn => btn.addEventListener("click", async () => {
+  if (await copyText(DEFAULT_PATH)) toast("Path copied. Paste it into File Explorer's address bar.");
+  else toast("Copying is blocked here. Select the path in the Help section and press Ctrl+C.", true);
+}));
 
 async function copyJson() {
   const json = buildJson();
@@ -775,26 +984,36 @@ async function copyJson() {
 }
 
 $("download-btn").addEventListener("click", downloadJson);
-$("copy-btn").addEventListener("click", copyJson);
 
 let drag = null;
 let justDragged = false;
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+function beginPress(e, info) {
+  drag = { ...info, startX: e.clientX, startY: e.clientY, lastX: e.clientX, lastY: e.clientY,
+           active: false, ghost: null, holder: null, offsetX: 0, offsetY: 0,
+           touch: e.pointerType !== "mouse", timer: null };
+  if (drag.touch) {
+    info.li.classList.add("holding");
+    drag.timer = setTimeout(() => {
+      if (!drag || drag.active) return;
+      drag.li.classList.remove("holding");
+      navigator.vibrate?.(15);
+      activateDrag();
+    }, 300);
+  }
+}
+
 els.playlist.addEventListener("pointerdown", e => {
   const li = e.target.closest(".song.pl");
   if (!li || e.target.closest("button") || e.button !== 0) return;
-  drag = { li, from: +li.dataset.index, startY: e.clientY, active: false, ghost: null, offsetY: 0, lastY: e.clientY,
-           touch: e.pointerType !== "mouse", timer: null };
-  if (drag.touch) {
-    li.classList.add("holding");
-    drag.timer = setTimeout(() => {
-      if (!drag || drag.active) return;
-      li.classList.remove("holding");
-      navigator.vibrate?.(15);
-      startDrag();
-    }, 300);
-  }
+  beginPress(e, { kind: "pl", li, from: +li.dataset.index });
+});
+
+els.library.addEventListener("pointerdown", e => {
+  const li = e.target.closest(".song");
+  if (!li || li.classList.contains("added") || e.button !== 0) return;
+  beginPress(e, { kind: "lib", li, code: li.dataset.code });
 });
 
 function cancelHold() {
@@ -803,8 +1022,10 @@ function cancelHold() {
   drag.li.classList.remove("holding");
 }
 
-els.playlist.addEventListener("touchmove", e => { if (drag?.active) e.preventDefault(); }, { passive: false });
-els.playlist.addEventListener("contextmenu", e => { if (e.target.closest(".song.pl")) e.preventDefault(); });
+for (const list of [els.playlist, els.library]) {
+  list.addEventListener("touchmove", e => { if (drag?.active) e.preventDefault(); }, { passive: false });
+  list.addEventListener("contextmenu", e => { if (e.target.closest(".song")) e.preventDefault(); });
+}
 
 function slideRows(before) {
   if (reduceMotion) return;
@@ -818,57 +1039,110 @@ function slideRows(before) {
   });
 }
 
-function startDrag() {
+function rowTops() {
+  return new Map([...els.playlist.querySelectorAll(".song.pl:not(.placeholder)")].map(r => [r, r.getBoundingClientRect().top]));
+}
+
+function activateDrag() {
   const { li } = drag;
   const box = li.getBoundingClientRect();
   const ghost = li.cloneNode(true);
   ghost.classList.add("ghost");
-  ghost.classList.remove("selected");
+  ghost.classList.remove("selected", "holding", "added");
   ghost.style.left = box.left + "px";
   ghost.style.top = box.top + "px";
   ghost.style.width = box.width + "px";
   document.body.append(ghost);
-  li.classList.add("placeholder");
-  document.body.classList.add("is-dragging");
   drag.ghost = ghost;
+  drag.offsetX = drag.startX - box.left;
   drag.offsetY = drag.startY - box.top;
+
+  els.playlist.querySelectorAll(".song.selected").forEach(r => r.classList.remove("selected"));
+  if (drag.kind === "pl") {
+    li.classList.add("placeholder");
+    drag.holder = li;
+  } else {
+    li.classList.add("lifting");
+    els.playlist.classList.add("drop-target");
+    const empty = els.playlist.querySelector(".empty");
+    if (empty) empty.textContent = "Drop the song here";
+  }
+  document.body.classList.add("is-dragging");
   drag.active = true;
 }
 
-function updateDrag(clientY) {
-  drag.ghost.style.top = (clientY - drag.offsetY) + "px";
+function overPlaylist(x, y) {
+  const b = els.playlist.getBoundingClientRect();
+  return x >= b.left && x <= b.right && y >= b.top && y <= b.bottom;
+}
 
+function placeHolder(y) {
+  const h = drag.holder;
   const others = [...els.playlist.querySelectorAll(".song.pl:not(.placeholder)")];
-  const next = others.find(r => { const b = r.getBoundingClientRect(); return clientY < b.top + b.height / 2; }) || null;
-  if (drag.li.nextElementSibling === next || (next === null && drag.li === els.playlist.lastElementChild)) return;
-
-  const before = new Map(others.map(r => [r, r.getBoundingClientRect().top]));
-  els.playlist.insertBefore(drag.li, next);
+  const next = others.find(r => { const b = r.getBoundingClientRect(); return y < b.top + b.height / 2; }) || null;
+  if (h.parentNode === els.playlist &&
+      (h.nextElementSibling === next || (next === null && h === els.playlist.lastElementChild))) return;
+  const before = rowTops();
+  els.playlist.insertBefore(h, next);
   slideRows(before);
+}
+
+function updateMove(x, y) {
+  drag.ghost.style.top = (y - drag.offsetY) + "px";
+  if (drag.kind === "pl") { placeHolder(y); return; }
+
+  drag.ghost.style.left = (x - drag.offsetX) + "px";
+  const empty = els.playlist.querySelector(".empty");
+  if (overPlaylist(x, y)) {
+    if (!drag.holder) {
+      const song = BY_CODE.get(drag.code);
+      const slot = songRow({ name: song.name, iconId: "i-note", meta: "", metaClass: "slot" });
+      slot.classList.add("pl", "placeholder", "incoming");
+      const grip = document.createElement("span");
+      grip.className = "grip";
+      grip.innerHTML = icon("i-grip", 16);
+      slot.prepend(grip);
+      const bin = document.createElement("span");
+      bin.className = "row-remove";
+      slot.querySelector(".slot").replaceWith(bin);
+      drag.holder = slot;
+      els.playlist.classList.add("drop-hover");
+      if (empty) empty.hidden = true;
+    }
+    placeHolder(y);
+  } else if (drag.holder) {
+    const before = rowTops();
+    drag.holder.remove();
+    drag.holder = null;
+    slideRows(before);
+    els.playlist.classList.remove("drop-hover");
+    if (empty) empty.hidden = false;
+  }
 }
 
 window.addEventListener("pointermove", e => {
   if (!drag) return;
   if (!drag.active) {
-    const moved = Math.abs(e.clientY - drag.startY);
+    const moved = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
     if (drag.touch) {
       if (moved > 8) { cancelHold(); drag = null; }
       return;
     }
     if (moved < 6) return;
-    startDrag();
+    activateDrag();
   }
   e.preventDefault();
+  drag.lastX = e.clientX;
   drag.lastY = e.clientY;
-  updateDrag(e.clientY);
+  updateMove(e.clientX, e.clientY);
 });
 
 (function autoScroll() {
-  if (drag?.active) {
+  if (drag?.active && drag.holder) {
     const box = els.playlist.getBoundingClientRect();
     const y = drag.lastY;
     const step = y < box.top + 50 ? -10 : y > box.bottom - 50 ? 10 : 0;
-    if (step) { els.playlist.scrollTop += step; updateDrag(y); }
+    if (step) { els.playlist.scrollTop += step; updateMove(drag.lastX, drag.lastY); }
   }
   requestAnimationFrame(autoScroll);
 })();
@@ -881,14 +1155,26 @@ function endDrag() {
   if (!d.active) return;
   d.ghost.remove();
   document.body.classList.remove("is-dragging");
+  els.playlist.classList.remove("drop-target", "drop-hover");
   justDragged = true;
   setTimeout(() => { justDragged = false; }, 0);
 
-  const order = [...els.playlist.querySelectorAll(".song.pl")].map(r => +r.dataset.index);
-  const old = playlist;
-  playlist = order.map(i => old[i]);
-  selected = order.indexOf(d.from);
+  if (d.kind === "pl") {
+    const order = [...els.playlist.querySelectorAll(".song.pl")].map(r => +r.dataset.index);
+    const old = playlist;
+    playlist = order.map(i => old[i]);
+    selected = order.indexOf(d.from);
+    render();
+    return;
+  }
+
+  if (d.holder?.parentNode && !playlist.includes(d.code)) {
+    const at = [...els.playlist.querySelectorAll(".song.pl")].indexOf(d.holder);
+    playlist.splice(at, 0, d.code);
+    selected = at;
+  }
   render();
+  scrollToSelected();
 }
 window.addEventListener("pointerup", endDrag);
 window.addEventListener("pointercancel", endDrag);
@@ -896,20 +1182,28 @@ window.addEventListener("pointercancel", endDrag);
 function showCode(open) {
   $("code-box").hidden = !open;
   $("code-toggle").setAttribute("aria-expanded", open);
-  $("code-toggle").textContent = open ? "Hide code" : "Show code";
+  $("code-toggle").querySelector(".code-label").textContent = open ? "Hide code" : "Show code";
 }
 $("code-toggle").addEventListener("click", () => showCode($("code-box").hidden));
 
 els.search.addEventListener("input", renderLibrary);
 $("add-all").addEventListener("click", () => {
+  const prev = snapshot();
+  const before = playlist.length;
   SONGS.forEach(s => { if (!playlist.includes(s.code)) playlist.push(s.code); });
   render();
+  if (playlist.length > before) toast(`Added ${playlist.length - before} songs.`, false, { label: "Undo", fn: () => restore(prev) });
 });
-$("clear").addEventListener("click", () => setPlaylist([]));
-$("defaults").addEventListener("click", () => setPlaylist([...DEFAULT_CODES]));
+$("clear").addEventListener("click", () => {
+  if (!playlist.length) return;
+  const prev = snapshot();
+  setPlaylist([]);
+  toast("Playlist cleared.", false, undoable(prev));
+});
 $("shuffle").addEventListener("click", () => { shuffle = !shuffle; render(); });
 $("loop").addEventListener("click", () => { loopOne = !loopOne; render(); });
 
+loadSaved();
 render();
 </script>
 </body>
