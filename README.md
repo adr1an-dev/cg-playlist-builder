@@ -4,7 +4,6 @@ Build your ULTRAKILL Cyber Grind playlist in the browser instead of the in-game 
 
 **Use it here: [cybergrindplaylist.online](https://cybergrindplaylist.online/)**
 
-![CyberGrindPlaylistBuilderOS 2.0](preview.png)
 
 ## What it does
 
