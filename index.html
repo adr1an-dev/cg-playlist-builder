@@ -677,11 +677,7 @@ function removeAt(index) {
   render();
 }
 function pickSong(code) {
-  const i = playlist.indexOf(code);
-  if (i === -1) { addSong(code); return; }
-  selected = i;
-  render();
-  scrollToSelected();
+  if (!playlist.includes(code)) addSong(code);
 }
 function moveAt(index, direction) {
   const target = index + direction;
@@ -742,7 +738,7 @@ function renderLibrary() {
     if (added) li.classList.add("added");
     li.tabIndex = 0;
     li.setAttribute("role", "button");
-    li.setAttribute("aria-label", `${song.name}, ${added ? "already in playlist, press to find it" : "press to add"}`);
+    li.setAttribute("aria-label", `${song.name}, ${added ? "already in playlist" : "press to add"}`);
     li.dataset.code = song.code;
     if (!added) li.title = "Click or drag to add";
     li.addEventListener("click", () => { if (!justDragged) pickSong(song.code); });
