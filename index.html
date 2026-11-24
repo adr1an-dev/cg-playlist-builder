@@ -7,7 +7,7 @@
 <meta name="description" content="Build a custom ULTRAKILL Cyber Grind playlist from all 82 in-game songs. Pick songs, reorder them and download a ready-made slot1.json. Free, no install.">
 <link rel="canonical" href="https://cybergrindplaylist.online/">
 <meta name="theme-color" content="#b3242b">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23b3242b'/%3E%3Cpath fill='%236a1015' d='M4 1h8v1h1v1h1v1h1v8h-1v1h-1v1h-1v1H4v-1H3v-1H2v-1H1V4h1V3h1V2h1z'/%3E%3Cpath fill='%23b3242b' d='M4 5h2v2H4zM9 6h4v1H9zM4 9h1v1h1v1h4v-1h1V9h1v1h-1v1h-1v1H6v-1H5v-1H4z'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23b3242b'/%3E%3Cpath fill='%236a1015' d='M5 2h9v9h-1v1h-1v1H9v-1H8v-3h1V8h3v1h0V5H7v7H6v1H5v1H2v-1H1v-3h1V9h3z'/%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CyberGrindPlaylistBuilder">
@@ -407,7 +407,6 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
         <section class="window" aria-labelledby="pl-title">
           <div class="titlebar">
             <h2 id="pl-title"><svg width="32" height="32" aria-hidden="true"><use href="#i-note"/></svg>Playlist</h2>
-            <span class="count" id="pl-count" aria-live="polite"></span>
           </div>
           <div class="pane-body">
             <div class="pl-layout">
@@ -601,7 +600,7 @@ let loopOne = false;
 const $ = id => document.getElementById(id);
 const els = {
   library: $("library"), playlist: $("playlist"), search: $("search"),
-  libCount: $("lib-count"), plCount: $("pl-count"),
+  libCount: $("lib-count"),
   output: $("output"), toast: $("toast"), drop: $("drop"),
 };
 
@@ -799,7 +798,6 @@ function renderPlaylist() {
   });
   els.playlist.scrollTop = scroll;
 
-  els.plCount.textContent = `${playlist.length} song${playlist.length === 1 ? "" : "s"}`;
   $("shuffle").setAttribute("aria-pressed", shuffle);
   $("loop").setAttribute("aria-pressed", loopOne);
   $("mode-note").textContent =
