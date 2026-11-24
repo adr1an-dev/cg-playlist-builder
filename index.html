@@ -3,7 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CyberGrindPlaylistBuilder</title>
+<title>CyberGrindPlaylistBuilder | ULTRAKILL Cyber Grind Playlist Maker</title>
+<meta name="description" content="Build a custom ULTRAKILL Cyber Grind playlist from all 82 in-game songs. Pick songs, reorder them and download a ready-made slot1.json. Free, no install.">
+<link rel="canonical" href="https://cybergrindplaylist.online/">
+<meta name="theme-color" content="#b3242b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23b3242b'/%3E%3Cpath fill='%236a1015' d='M4 1h8v1h1v1h1v1h1v8h-1v1h-1v1h-1v1H4v-1H3v-1H2v-1H1V4h1V3h1V2h1z'/%3E%3Cpath fill='%23b3242b' d='M4 5h2v2H4zM9 6h4v1H9zM4 9h1v1h1v1h4v-1h1V9h1v1h-1v1h-1v1H6v-1H5v-1H4z'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CyberGrindPlaylistBuilder">
+<meta property="og:title" content="CyberGrindPlaylistBuilder: make your ULTRAKILL Cyber Grind playlist">
+<meta property="og:description" content="Build a custom ULTRAKILL Cyber Grind playlist from all 82 in-game songs. Pick songs, reorder them and download a ready-made slot1.json. Free, no install.">
+<meta property="og:url" content="https://cybergrindplaylist.online/">
+<meta property="og:image" content="https://cybergrindplaylist.online/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The playlist builder: a red terminal window listing Cyber Grind songs with a Download slot1.json button">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CyberGrindPlaylistBuilder: make your ULTRAKILL Cyber Grind playlist">
+<meta name="twitter:description" content="Build a custom ULTRAKILL Cyber Grind playlist from all 82 in-game songs. Pick songs, reorder them and download a ready-made slot1.json. Free, no install.">
+<meta name="twitter:image" content="https://cybergrindplaylist.online/preview.png">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"CyberGrindPlaylistBuilder","url":"https://cybergrindplaylist.online/","description":"Build a custom ULTRAKILL Cyber Grind playlist from all 82 in-game songs. Pick songs, reorder them and download a ready-made slot1.json. Free, no install.","applicationCategory":"GameApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Jersey+10&family=VT323&display=swap">
 <style>
@@ -126,6 +148,8 @@ body {
   text-shadow: 2px 2px 0 var(--red-dark);
   flex: none;
 }
+.made-count { margin: 0; text-align: center; color: var(--dim); font-size: 1.1rem; flex: none; }
+.made-count b { color: var(--text); font-family: var(--font-num); font-size: 1.45rem; font-weight: 400; }
 .download:hover { filter: brightness(1.1); }
 .download:active { border-color: rgba(0,0,0,.55) rgba(255,255,255,.25) rgba(255,255,255,.25) rgba(0,0,0,.55); transform: translateY(1px); }
 
@@ -318,7 +342,7 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
               <div class="group">
                 <button class="btn" id="code-toggle" type="button" aria-expanded="false" aria-controls="code-box">Show code</button>
                 <button class="btn" id="clear" type="button">Clear</button>
-                <button class="btn" id="defaults" type="button">Reset</button>
+                <button class="btn" id="defaults" type="button">Load game default</button>
               </div>
               <div class="group">
                 <button class="btn square" id="loop" type="button" aria-pressed="false" aria-label="Repeat one song" title="Repeat one song (not confirmed yet)"><svg width="24" height="24" aria-hidden="true"><use href="#i-repeat"/></svg></button>
@@ -333,6 +357,7 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
             </div>
 
             <button class="download" id="download-btn" type="button">Download slot1.json</button>
+            <p class="made-count" id="made-count" hidden></p>
           </div>
         </section>
       </div>
@@ -437,8 +462,8 @@ const SONGS = [
 const BY_CODE = new Map(SONGS.map(s => [s.code, s]));
 const DEFAULT_CODES = SONGS.slice(0, 8).map(s => s.code);
 
-let playlist = [...DEFAULT_CODES];
-let selected = 0;
+let playlist = [];
+let selected = -1;
 let shuffle = true;
 let loopOne = false;
 
@@ -663,6 +688,47 @@ document.addEventListener("paste", e => {
   if (text.includes("_ids")) { e.preventDefault(); importJson(text); }
 });
 
+const GOATCOUNTER_CODE = "adr1an";
+const CREATED_PATH = "/playlist-created";
+let createdCount = null;
+
+function showCreated() {
+  const el = $("made-count");
+  if (createdCount === null) return;
+  el.replaceChildren();
+  if (createdCount === 0) {
+    el.textContent = "Be the first to make a playlist with this tool <3";
+  } else {
+    const b = document.createElement("b");
+    b.textContent = createdCount.toLocaleString("en-US");
+    el.append(b, ` playlist${createdCount === 1 ? "" : "s"} created with this tool <3`);
+  }
+  el.hidden = false;
+}
+
+function loadCreated() {
+  const url = `https://${GOATCOUNTER_CODE}.goatcounter.com/counter/${encodeURIComponent(CREATED_PATH)}.json`;
+  fetch(url)
+    .then(r => r.status === 404 ? { count: "0" } : r.ok ? r.json() : null)
+    .then(d => { if (d) { createdCount = parseInt(String(d.count).replace(/\D/g, ""), 10) || 0; showCreated(); } })
+    .catch(() => {});
+}
+
+function countCreated() {
+  if (!GOATCOUNTER_CODE) return;
+  window.goatcounter?.count?.({ path: CREATED_PATH, title: "Playlist created" });
+  if (createdCount !== null) { createdCount++; showCreated(); }
+}
+
+if (GOATCOUNTER_CODE && location.hostname !== "" && !window.claude) {
+  const sc = document.createElement("script");
+  sc.async = true;
+  sc.src = "https://gc.zgo.at/count.js";
+  sc.dataset.goatcounter = `https://${GOATCOUNTER_CODE}.goatcounter.com/count`;
+  document.head.append(sc);
+  loadCreated();
+}
+
 let downloadsApi = null;
 window.claude?.use?.("downloads").then(api => { downloadsApi = api; }).catch(() => {});
 
@@ -674,6 +740,7 @@ async function downloadJson() {
     try {
       await downloadsApi.save({ filename: "slot1.json", data: json });
       toast("Downloaded slot1.json.");
+      countCreated();
     } catch (err) {
       if (err?.code !== "declined") toast("Download didn't work here. Use Copy instead.", true);
     }
@@ -687,11 +754,12 @@ async function downloadJson() {
   document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   toast("Downloaded slot1.json.");
+  countCreated();
 }
 
 async function copyJson() {
   const json = buildJson();
-  try { await navigator.clipboard.writeText(json); toast("Copied. Paste it into slot1.json."); return; } catch {}
+  try { await navigator.clipboard.writeText(json); toast("Copied. Paste it into slot1.json."); countCreated(); return; } catch {}
   const ta = document.createElement("textarea");
   ta.value = json; ta.setAttribute("readonly", "");
   ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
@@ -699,7 +767,7 @@ async function copyJson() {
   let ok = false;
   try { ok = document.execCommand("copy"); } catch {}
   ta.remove();
-  if (ok) { toast("Copied. Paste it into slot1.json."); return; }
+  if (ok) { toast("Copied. Paste it into slot1.json."); countCreated(); return; }
   showCode(true);
   els.output.focus(); els.output.select();
   toast("Copying is blocked here. The code is selected, press Ctrl+C.", true);
