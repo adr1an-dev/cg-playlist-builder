@@ -1,8 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CyberGrindPlaylistBuilder</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Jersey+10&family=VT323&display=swap">
 <style>
+body { margin: 0; }
 
 :root {
   --world: #10222b;
@@ -22,6 +27,7 @@
   --font-num: "VT323", ui-monospace, Consolas, monospace;
   color-scheme: dark;
 }
+[hidden] { display: none !important; }
 * { box-sizing: border-box; }
 html { font-size: 18px; }
 html, body { height: 100%; }
@@ -248,7 +254,8 @@ input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; po
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 @media (prefers-reduced-motion: reduce) { .btn:active, .download:active { transform: none; } }
 </style>
-
+</head>
+<body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 
   <symbol id="i-wink" viewBox="0 0 16 16">
@@ -812,3 +819,5 @@ $("loop").addEventListener("click", () => { loopOne = !loopOne; render(); });
 
 render();
 </script>
+</body>
+</html>
